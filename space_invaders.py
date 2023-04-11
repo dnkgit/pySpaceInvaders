@@ -63,3 +63,38 @@ class Background:
     def draw(self):
         for (x,y,speed) in self.star_list:
             pyxel.pset(x,y,STAR_COLOUR_HIGH if speed > 1.8 else STAR_COLOUR_LOW)
+
+class Player:
+    def __init__(self):
+        self.x = x
+        self.y = y
+        self.w = PLAYER_WIDTH
+        self.h = PLAYER_HEIGHT
+        self.alive = True
+
+    def update(self):
+        if pyxel.btn(pyxel.KEY_LEFT):
+            self.x -= PLAYER_SPEED
+
+        if pyxel.btn(pyxel.KEY_RIGHT):
+            self.x += PLAYER_SPEED
+
+        if pyxel.btn(pyxel.KEY_UP):
+            self.y += PLAYER_SPEED
+
+        if pyxel.btn(pyxel.KEY_DOWN):
+            self.y -= PLAYER_SPEED
+
+        self.x = max(self.x, 0)
+        self.x = min(self.x, pyxel.width - self.w)
+
+        self.y = max(self.y, 0)
+        self.y = min(self.y, pyxel.height - self.w)
+
+        if pyxel.btn(pyxel.KEY_SPACE):
+            Bullet(self.x + (PLAYER_WIDTH - BULLET_WIDTH) / 2, self.y + BULLET_HEIGHT / 2)
+
+        pyxel.play(0,0)
+
+        def draw(self):
+            pyxel.blt(self.x, self.y, 0, 0, 0, self.w, self.h, 0)
