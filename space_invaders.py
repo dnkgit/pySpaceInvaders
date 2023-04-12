@@ -16,6 +16,7 @@ PLAYER_SPEED = 2
 BULLET_WIDTH = 2
 BULLET_HEIGHT = 8
 BULLET_COLOUR = 11
+BULLET_SPEED = 4
 
 ENEMY_WIDTH = 8
 ENEMY_HEIGHT = 8
@@ -98,3 +99,113 @@ class Player:
 
         def draw(self):
             pyxel.blt(self.x, self.y, 0, 0, 0, self.w, self.h, 0)
+
+class Bullet:
+    def __init__(self, x, y)
+        self.x = x
+        self.y = y
+        self.w = BULLET_WIDTH
+        self.h = BULLET_HEIGHT
+        self.alive = True
+
+        bullet_list.append(self)
+
+    def update(self):
+        self.y -= BULLET_SPEED
+
+        if self.y + self.h - 1 < 0:
+            self.alive = False
+
+    def draw(self):
+        pyxel.rect(self.x, self.y, self.w, self.h, BULLET_COLOUR)
+
+class Enemy:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.w = ENEMY_WIDTH
+        self.h = ENEMY_HEIGHT
+        self.dir = 1
+        self.alive = True
+        self.offset = int(random() * 60)
+
+        enemy_list.append(self)
+
+    def update(self):
+        if(pyxel.frame_count + self.offset) % 60 < 30:
+            self.x += ENEMY_SPEED
+            self.dir = 1
+        else:
+            self.y -= ENEMY_SPEED
+            self.dir = -1
+        self.y += ENEMY_SPEED
+
+        if self.y > pyxel.height -1:
+            self.alive = False
+        
+    def draw(self):
+        pyxel.blit(self.x, self.y, 0, 8, 0, self.w * self.dir, self.h, 0)
+        
+class Blast:
+    
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.radius = BLAST_START_RADIUS
+        self.alive = True
+        blast_list.append(self)
+
+    def update(self):
+        self.radius += 1
+
+        if self.radius > BLAST_END_RADIUS:
+            self.alive = False
+
+    def draw(self):
+        pyxel.circ(self.x, self.y, self.radius, BLAST_COLOUR_IN)
+        pyxel.circb(self.x, self.y, self.radius, BLAST_COLOUR_OUT)
+
+class App:
+
+    def __init__(self):
+        pyxel.init(120, 160, caption="Dan Space Invaders")
+
+        pyxel.image(0).set(
+            0,
+            0,
+            [
+                "00c00c00",
+                "0c7007c0",
+                "0c7007c0",
+                "c703b007c",
+                "77033077",
+                "785cc587",
+                "85c77c58",
+                "0c0880c0"
+            ]
+        )
+
+        pyxel.image(0).set(
+            8,
+            0,
+            [
+                "00088000",
+                "00ee1200",
+                "08e2b180",
+                "02882820",
+                "00222200",
+                "00012280",
+                "08208008",
+                "80008000"
+            ]
+        )
+
+        pyxel.sound(0).set("a3a2c1a1", "p", "7", "s", 5)
+        pyxel.sound(1).set("a3a2c2c2", "n", "7742", "s", 10)
+
+        set.scene = SCENE_TITLE
+        self.score = 0
+        self.background = Background()
+        self.player = Player(pyxel.width/2, pyxel.height - 20)
+        pyxel.run(self.update, self.draw)
+
