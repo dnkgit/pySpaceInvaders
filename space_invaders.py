@@ -5,7 +5,7 @@ SCENE_TITLE = 0
 SCENE_PLAY = 1
 SCENE_GAMEOVER = 2
 
-STAR_COUNT = 100
+STAR_COUNT = 300
 STAR_COLOUR_HIGH = 12
 STAR_COLOUR_LOW = 5
 
@@ -20,10 +20,10 @@ BULLET_SPEED = 4
 
 ENEMY_WIDTH = 8
 ENEMY_HEIGHT = 8
-ENEMY_SPEED = 1.5
+ENEMY_SPEED = 1.0
 
 BLAST_START_RADIUS = 1
-BLAST_END_RADIUS = 8
+BLAST_END_RADIUS = 12
 BLAST_COLOUR_IN = 7
 BLAST_COLOUR_OUT = 10
 
@@ -136,8 +136,9 @@ class Enemy:
             self.x += ENEMY_SPEED
             self.dir = 1
         else:
-            self.y -= ENEMY_SPEED
+            self.x -= ENEMY_SPEED
             self.dir = -1
+        
         self.y += ENEMY_SPEED
 
         if self.y > pyxel.height -1:
@@ -226,7 +227,8 @@ class App:
     
     def update_play_scene(self):
         if pyxel.frame_count % 6 == 0:
-            Enemy(random() * (pyxel.width - PLAYER_WIDTH), 0)
+            if len(enemy_list) < 8:
+                Enemy(random() * (pyxel.width - PLAYER_WIDTH), 0)
             for a in enemy_list:
                 for b in bullet_list:
                     if (a.x + a.w > b.x
