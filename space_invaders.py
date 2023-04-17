@@ -97,8 +97,8 @@ class Player:
 
         pyxel.play(0,0)
 
-        def draw(self):
-            pyxel.blt(self.x, self.y, 0, 0, 0, self.w, self.h, 0)
+    def draw(self):
+        pyxel.blt(self.x, self.y, 0, 0, 0, self.w, self.h, 0)
 
 class Bullet:
     def __init__(self, x, y):
@@ -144,7 +144,7 @@ class Enemy:
             self.alive = False
         
     def draw(self):
-        pyxel.blit(self.x, self.y, 0, 8, 0, self.w * self.dir, self.h, 0)
+        pyxel.blt(self.x, self.y, 0, 8, 0, self.w * self.dir, self.h, 0)
         
 class Blast:
     
@@ -289,9 +289,16 @@ class App:
         pyxel.text(pyxel.width/5,66,"Start Space Invaders", pyxel.frame_count % 16)
     
     def draw_play_scene(self):
-        pass
+        self.player.draw()
+        draw_list(bullet_list)
+        draw_list(enemy_list)
+        draw_list(blast_list)
 
     def draw_gameover_scene(self):
-        pass
+        draw_list(bullet_list)
+        draw_list(enemy_list)
+        draw_list(blast_list)
+        pyxel.text(43,66, "Game Over", 8)
+        pyxel.text(31,126, "Press Return", 13)
 
 App()
